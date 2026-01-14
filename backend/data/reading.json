@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "title": "The Benefits of Learning a Second Language",
+    "content": "Learning a second language offers numerous benefits. It improves cognitive abilities, enhances memory, and increases attention span. Studies have shown that bilingual individuals tend to have better problem-solving skills and are more creative. They also have an increased ability to focus and filter out distractions.\n\nIn today's global economy, learning a new language opens up career opportunities. Many companies value employees who can communicate in multiple languages. Bilingual workers often have an advantage in the job market and may earn higher salaries. They can work in international business, translation, teaching, and many other fields.\n\nLearning a second language also allows for a deeper understanding of other cultures. Language is closely connected to culture, and learning a language provides insight into the traditions, customs, and way of thinking of a different group of people. It promotes cultural awareness and tolerance.\n\nFinally, learning a second language can be a fun and rewarding experience. It provides opportunities to meet new people, travel, and enjoy literature, music, and films in their original language. It can also boost self-confidence and provide a sense of accomplishment.",
+    "difficulty": 2,
+    "type": "careful",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What cognitive benefits are mentioned in the passage?",
+        "option_a": "Improved physical health",
+        "option_b": "Better problem-solving skills",
+        "option_c": "Increased wealth",
+        "option_d": "Better physical coordination",
+        "answer": "b",
+        "explanation": "The passage mentions that bilingual individuals tend to have better problem-solving skills."
+      },
+      {
+        "id": 2,
+        "question": "How can learning a second language help with career opportunities?",
+        "option_a": "It guarantees a promotion",
+        "option_b": "It eliminates the need for interviews",
+        "option_c": "It provides an advantage in the job market",
+        "option_d": "It automatically increases salary by 50%",
+        "answer": "c",
+        "explanation": "The passage states that bilingual workers often have an advantage in the job market."
+      },
+      {
+        "id": 3,
+        "question": "What cultural benefits are associated with learning a second language?",
+        "option_a": "Free travel to foreign countries",
+        "option_b": "Deeper understanding of other cultures",
+        "option_c": "Automatic citizenship in another country",
+        "option_d": "Ability to cook foreign food",
+        "answer": "b",
+        "explanation": "The passage mentions that learning a language provides insight into the traditions, customs, and way of thinking of a different group of people."
+      },
+      {
+        "id": 4,
+        "question": "Which of the following is NOT mentioned as a benefit of learning a second language?",
+        "option_a": "Enhanced memory",
+        "option_b": "Better job prospects",
+        "option_c": "Improved physical strength",
+        "option_d": "Cultural awareness",
+        "answer": "c",
+        "explanation": "The passage does not mention improved physical strength as a benefit of learning a second language."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "The Importance of Sleep",
+    "content": "Sleep is essential for good health and well-being. It plays a crucial role in various bodily functions, including physical recovery, immune system support, and brain function.\n\nDuring sleep, the body repairs and regenerates tissues, builds bone and muscle, and strengthens the immune system. Lack of sleep can weaken the immune system, making individuals more susceptible to infections and diseases.\n\nSleep is also important for cognitive function. It helps with memory consolidation, learning, and problem-solving. Studies have shown that adequate sleep improves concentration, creativity, and decision-making abilities. On the other hand, sleep deprivation can impair judgment, reduce alertness, and affect mood.\n\nThe amount of sleep needed varies depending on age, but most adults require 7-9 hours of sleep per night. However, many people do not get enough sleep due to various factors such as work pressure, stress, and excessive use of electronic devices.\n\nTo improve sleep quality, experts recommend maintaining a regular sleep schedule, creating a comfortable sleep environment, avoiding caffeine and alcohol before bedtime, and limiting screen time in the evening.",
+    "difficulty": 2,
+    "type": "careful",
+    "questions": [
+      {
+        "id": 5,
+        "question": "What bodily functions are mentioned as being affected by sleep?",
+        "option_a": "Physical recovery and immune system support",
+        "option_b": "Hair growth and nail strength",
+        "option_c": "Vision and hearing",
+        "option_d": "Sense of taste and smell",
+        "answer": "a",
+        "explanation": "The passage states that sleep plays a crucial role in various bodily functions, including physical recovery, immune system support, and brain function."
+      },
+      {
+        "id": 6,
+        "question": "How does lack of sleep affect the immune system?",
+        "option_a": "It strengthens the immune system",
+        "option_b": "It has no effect on the immune system",
+        "option_c": "It weakens the immune system",
+        "option_d": "It completely shuts down the immune system",
+        "answer": "c",
+        "explanation": "The passage mentions that lack of sleep can weaken the immune system, making individuals more susceptible to infections and diseases."
+      },
+      {
+        "id": 7,
+        "question": "How many hours of sleep do most adults require per night?",
+        "option_a": "5-6 hours",
+        "option_b": "7-9 hours",
+        "option_c": "10-12 hours",
+        "option_d": "13-15 hours",
+        "answer": "b",
+        "explanation": "The passage states that most adults require 7-9 hours of sleep per night."
+      },
+      {
+        "id": 8,
+        "question": "Which of the following is NOT recommended for improving sleep quality?",
+        "option_a": "Maintaining a regular sleep schedule",
+        "option_b": "Creating a comfortable sleep environment",
+        "option_c": "Drinking coffee before bedtime",
+        "option_d": "Limiting screen time in the evening",
+        "answer": "c",
+        "explanation": "The passage recommends avoiding caffeine before bedtime, so drinking coffee before bedtime is not recommended."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "The Internet and Modern Society",
+    "content": "The Internet has transformed modern society in numerous ways. It has revolutionized communication, making it easier and faster to connect with people around the world. Email, social media, and video conferencing have made long-distance communication almost instantaneous.\n\nThe Internet has also changed the way we access information. Before the Internet, people relied on books, newspapers, and libraries for information. Now, a vast amount of information is available at our fingertips through search engines and online databases.\n\nIn the business world, the Internet has opened up new opportunities for commerce. E-commerce platforms allow businesses to reach customers globally, and online banking and payment systems have made financial transactions more convenient.\n\nHowever, the Internet also presents challenges. Issues such as online privacy, cybersecurity threats, and digital divide have become important concerns. The digital divide refers to the gap between those who have access to the Internet and those who do not, which can exacerbate existing social inequalities.\n\nDespite these challenges, the Internet continues to evolve and shape our lives in new ways. It has become an integral part of modern society, influencing how we work, learn, communicate, and entertain ourselves.",
+    "difficulty": 3,
+    "type": "careful",
+    "questions": [
+      {
+        "id": 9,
+        "question": "How has the Internet revolutionized communication?",
+        "option_a": "It has made communication slower but more formal",
+        "option_b": "It has made long-distance communication almost instantaneous",
+        "option_c": "It has eliminated face-to-face communication",
+        "option_d": "It has made communication more expensive",
+        "answer": "b",
+        "explanation": "The passage states that email, social media, and video conferencing have made long-distance communication almost instantaneous."
+      },
+      {
+        "id": 10,
+        "question": "What was a common source of information before the Internet?",
+        "option_a": "Television and radio",
+        "option_b": "Books, newspapers, and libraries",
+        "option_c": "Word of mouth",
+        "option_d": "Mobile phones",
+        "answer": "b",
+        "explanation": "The passage mentions that before the Internet, people relied on books, newspapers, and libraries for information."
+      },
+      {
+        "id": 11,
+        "question": "What is the digital divide?",
+        "option_a": "The gap between different generations' use of technology",
+        "option_b": "The difference between desktop and mobile Internet",
+        "option_c": "The gap between those who have access to the Internet and those who do not",
+        "option_d": "The difference between Internet speeds in different countries",
+        "answer": "c",
+        "explanation": "The passage defines the digital divide as the gap between those who have access to the Internet and those who do not."
+      },
+      {
+        "id": 12,
+        "question": "Which of the following is NOT mentioned as a challenge posed by the Internet?",
+        "option_a": "Online privacy concerns",
+        "option_b": "Cybersecurity threats",
+        "option_c": "Digital divide",
+        "option_d": "Lack of entertainment options",
+        "answer": "d",
+        "explanation": "The passage does not mention lack of entertainment options as a challenge posed by the Internet."
+      }
+    ]
+  }
+]

@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CET-4 英语四级学习助手</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E40AF', // 主色调：深蓝色
+                        secondary: '#60A5FA', // 辅助色：浅蓝色
+                        accent: '#3B82F6', // 强调色
+                        neutral: '#F3F4F6', // 中性色：浅灰色
+                        'text-primary': '#1F2937', // 主文本色
+                        'text-secondary': '#6B7280', // 次要文本色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'flip': 'flip 0.6s ease-in-out',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out',
+                        'slide-down': 'slideDown 0.5s ease-in-out',
+                        'slide-left': 'slideLeft 0.5s ease-in-out',
+                        'slide-right': 'slideRight 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        flip: {
+                            '0%': { transform: 'rotateY(0deg)' },
+                            '100%': { transform: 'rotateY(180deg)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideLeft: {
+                            '0%': { transform: 'translateX(20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- API 调用模块 -->
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api';
+        
+        class API {
+            constructor() {
+                this.token = localStorage.getItem('token');
+            }
+            
+            setToken(token) {
+                this.token = token;
+                localStorage.setItem('token', token);
+            }
+            
+            async request(endpoint, options = {}) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...options.headers,
+                };
+                
+                if (this.token) {
+                    headers['Authorization'] = `Bearer ${this.token}`;
+                }
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        ...options,
+                        headers,
+                    });
+                    
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.message || '请求失败');
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('API 请求错误:', error);
+                    throw error;
+                }
+            }
+            
+            // 用户相关
+            async register(userData) {
+                return this.request('/users/register', {
+                    method: 'POST',
+                    body: JSON.stringify(userData),
+                });
+            }
+            
+            async login(credentials) {
+                return this.request('/users/login', {
+                    method: 'POST',
+                    body: JSON.stringify(credentials),
+                });
+            }
+            
+            async getProfile() {
+                return this.request('/users/profile');
+            }
+            
+            // 词汇相关
+            async getVocabularyList(params) {
+                const query = new URLSearchParams(params).toString();
+                return this.request(`/vocabulary?${query}`);
+            }
+            
+            async getVocabularyDetail(id) {
+                return this.request(`/vocabulary/${id}`);
+            }
+            
+            async submitVocabularyReview(data) {
+                return this.request('/vocabulary/review', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+            }
+            
+            async getVocabularyTest(params) {
+                const query = new URLSearchParams(params).toString();
+                return this.request(`/vocabulary/test?${query}`);
+            }
+            
+            async submitVocabularyTest(data) {
+                return this.request('/vocabulary/test', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+            }
+            
+            // 听力相关
+            async getListeningList(params) {
+                const query = new URLSearchParams(params).toString();
+                return this.request(`/listening?${query}`);
+            }
+            
+            async getListeningDetail(id) {
+                return this.request(`/listening/${id}`);
+            }
+            
+            async getListeningQuestions(id) {
+                return this.request(`/listening/${id}/questions`);
+            }
+            
+            async submitListeningAnswers(id, data) {
+                return this.request(`/listening/${id}/answer`, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+            }
+            
+            // 阅读相关
+            async getReadingList(params) {
+                const query = new URLSearchParams(params).toString();
+                return this.request(`/reading?${query}`);
+            }
+            
+            async getReadingDetail(id) {
+                return this.request(`/reading/${id}`);
+            }
+            
+            async getReadingQuestions(id) {
+                return this.request(`/reading/${id}/questions`);
+            }
+            
+            async submitReadingAnswers(id, data) {
+                return this.request(`/reading/${id}/answer`, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+            }
+            
+            // 写作相关
+            async getWritingList(params) {
+                const query = new URLSearchParams(params).toString();
+                return this.request(`/writing?${query}`);
+            }
+            
+            async getWritingDetail(id) {
+                return this.request(`/writing/${id}`);
+            }
+            
+            async submitWritingAnswer(id, data) {
+                return this.request(`/writing/${id}/submit`, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+            }
+            
+            async getWritingTemplates(type) {
+                const query = type ? `?type=${type}` : '';
+                return this.request(`/writing/templates${query}`);
+            }
+            
+            // 学习进度相关
+            async getProgress() {
+                return this.request('/progress');
+            }
+            
+            async getSkillsData() {
+                return this.request('/progress/skills');
+            }
+            
+            async getAILearningPath() {
+                return this.request('/progress/ai-path');
+            }
+            
+            async getPredictedScore() {
+                return this.request('/progress/predicted-score');
+            }
+        }
+        
+        // 创建API实例
+        const api = new API();
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-flip {
+                perspective: 1000px;
+            }
+            .card-inner {
+                transition: transform 0.6s;
+                transform-style: preserve-3d;
+            }
+            .card-flip:hover .card-inner {
+                transform: rotateY(180deg);
+            }
+            .card-front, .card-back {
+                backface-visibility: hidden;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .card-back {
+                transform: rotateY(180deg);
+            }
+            .progress-ring {
+                transform: rotate(-90deg);
+                transform-origin: 50% 50%;
+            }
+            .tab-active {
+                @apply border-b-2 border-primary text-primary;
+            }
+            .btn-primary {
+                @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-300;
+            }
+            .btn-secondary {
+                @apply bg-secondary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-300;
+            }
+            .btn-outline {
+                @apply border border-primary text-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-all duration-300;
+            }
+            .card {
+                @apply bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-all duration-300;
+            }
+            .input-field {
+                @apply border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 应用容器 -->
+    <div id="app" class="max-w-md mx-auto bg-white min-h-screen relative pb-20">
+        <!-- 顶部导航栏 -->
+        <header class="bg-primary text-white p-4 shadow-md">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/6df5049823e841f18d9775e6b71fd615~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260114164352512709E92615884CBFA4&rrcfp=f06b921b&x-expires=1770972304&x-signature=rVDr2zaUU0PMHENNuhq7Vo%2FP7ZA%3D" alt="CET-4 助手" class="w-10 h-10 mr-2">
+                    <h1 class="text-xl font-bold">CET-4 英语四级助手</h1>
+                </div>
+                <button id="user-profile" class="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center">
+                    <i class="fa fa-user"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 学习进度概览 -->
+        <section class="p-4">
+            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                <h2 class="text-lg font-semibold text-text-primary mb-4">学习进度</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center">
+                        <div class="relative w-16 h-16 mr-4">
+                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                <path class="stroke-current text-gray-200" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                <path class="stroke-current text-primary progress-ring" stroke-width="3" fill="none" stroke-dasharray="60, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                            </svg>
+                            <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                                <span class="text-primary font-bold">60%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-text-secondary text-sm">总体完成度</p>
+                            <p class="text-text-primary font-medium">450/750 词汇</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="relative w-16 h-16 mr-4">
+                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                <path class="stroke-current text-gray-200" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                <path class="stroke-current text-secondary progress-ring" stroke-width="3" fill="none" stroke-dasharray="40, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                            </svg>
+                            <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                                <span class="text-secondary font-bold">40%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-text-secondary text-sm">备考进度</p>
+                            <p class="text-text-primary font-medium">24/60 天</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 今日学习计划 -->
+            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold text-text-primary">今日学习计划</h2>
+                    <span class="text-sm text-text-secondary">2026年1月14日</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-primary bg-opacity-10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-book"></i>
+                            </div>
+                            <span class="text-text-primary">词汇学习 (20个)</span>
+                        </div>
+                        <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center text-secondary mr-3">
+                                <i class="fa fa-headphones"></i>
+                            </div>
+                            <span class="text-text-primary">听力练习 (30分钟)</span>
+                        </div>
+                        <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-secondary h-2.5 rounded-full" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-accent bg-opacity-10 flex items-center justify-center text-accent mr-3">
+                                <i class="fa fa-file-text"></i>
+                            </div>
+                            <span class="text-text-primary">阅读理解 (2篇)</span>
+                        </div>
+                        <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-accent h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 主要功能区域 -->
+        <main class="px-4 pb-16">
+            <!-- 功能选项卡 -->
+            <div class="border-b border-gray-200 mb-6">
+                <div class="flex overflow-x-auto hide-scrollbar">
+                    <button class="tab-btn tab-active px-4 py-3 font-medium text-sm whitespace-nowrap" data-tab="vocabulary">词汇学习</button>
+                    <button class="tab-btn px-4 py-3 font-medium text-sm whitespace-nowrap text-text-secondary" data-tab="listening">听力训练</button>
+                    <button class="tab-btn px-4 py-3 font-medium text-sm whitespace-nowrap text-text-secondary" data-tab="reading">阅读理解</button>
+                    <button class="tab-btn px-4 py-3 font-medium text-sm whitespace-nowrap text-text-secondary" data-tab="writing">写作指导</button>
+                    <button class="tab-btn px-4 py-3 font-medium text-sm whitespace-nowrap text-text-secondary" data-tab="ai-path">AI学习路径</button>
+                </div>
+            </div>
+
+            <!-- 词汇学习模块 -->
+            <div id="vocabulary-tab" class="tab-content animate-fade-in">
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">今日词汇</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- 词汇卡片 1 -->
+                        <div class="card-flip h-36">
+                            <div class="card-inner relative w-full h-full">
+                                <div class="card-front card flex flex-col items-center justify-center">
+                                    <h4 class="text-xl font-bold text-primary mb-2">accomplish</h4>
+                                    <p class="text-text-secondary text-sm">/əˈkʌmplɪʃ/</p>
+                                    <p class="text-text-secondary text-xs mt-2">点击卡片查看释义</p>
+                                </div>
+                                <div class="card-back card flex flex-col items-center justify-center bg-primary bg-opacity-5">
+                                    <p class="text-text-primary font-medium mb-2">完成；实现</p>
+                                    <p class="text-text-secondary text-sm text-center">She has accomplished a great deal in her career.</p>
+                                    <p class="text-text-secondary text-xs mt-2">她在事业上取得了很大成就。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 词汇卡片 2 -->
+                        <div class="card-flip h-36">
+                            <div class="card-inner relative w-full h-full">
+                                <div class="card-front card flex flex-col items-center justify-center">
+                                    <h4 class="text-xl font-bold text-primary mb-2">adequate</h4>
+                                    <p class="text-text-secondary text-sm">/ˈædɪkwət/</p>
+                                    <p class="text-text-secondary text-xs mt-2">点击卡片查看释义</p>
+                                </div>
+                                <div class="card-back card flex flex-col items-center justify-center bg-primary bg-opacity-5">
+                                    <p class="text-text-primary font-medium mb-2">足够的；适当的</p>
+                                    <p class="text-text-secondary text-sm text-center">The room is adequate for our needs.</p>
+                                    <p class="text-text-secondary text-xs mt-2">这个房间足够满足我们的需要。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 词汇卡片 3 -->
+                        <div class="card-flip h-36">
+                            <div class="card-inner relative w-full h-full">
+                                <div class="card-front card flex flex-col items-center justify-center">
+                                    <h4 class="text-xl font-bold text-primary mb-2">beneficial</h4>
+                                    <p class="text-text-secondary text-sm">/ˌbenɪˈfɪʃl/</p>
+                                    <p class="text-text-secondary text-xs mt-2">点击卡片查看释义</p>
+                                </div>
+                                <div class="card-back card flex flex-col items-center justify-center bg-primary bg-opacity-5">
+                                    <p class="text-text-primary font-medium mb-2">有益的；有利的</p>
+                                    <p class="text-text-secondary text-sm text-center">Regular exercise is beneficial to health.</p>
+                                    <p class="text-text-secondary text-xs mt-2">经常锻炼对健康有益。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 词汇卡片 4 -->
+                        <div class="card-flip h-36">
+                            <div class="card-inner relative w-full h-full">
+                                <div class="card-front card flex flex-col items-center justify-center">
+                                    <h4 class="text-xl font-bold text-primary mb-2">circumstance</h4>
+                                    <p class="text-text-secondary text-sm">/ˈsɜːrkəmstæns/</p>
+                                    <p class="text-text-secondary text-xs mt-2">点击卡片查看释义</p>
+                                </div>
+                                <div class="card-back card flex flex-col items-center justify-center bg-primary bg-opacity-5">
+                                    <p class="text-text-primary font-medium mb-2">情况；环境</p>
+                                    <p class="text-text-secondary text-sm text-center">Under the circumstances, we have to cancel the trip.</p>
+                                    <p class="text-text-secondary text-xs mt-2">在这种情况下，我们不得不取消旅行。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button class="btn-outline flex items-center">
+                        <i class="fa fa-arrow-left mr-2"></i> 上一组
+                    </button>
+                    <button class="btn-primary flex items-center">
+                        下一组 <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+                
+                <div class="mt-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">词汇测试</h3>
+                    <div class="card">
+                        <p class="text-text-primary mb-4">请选择下列单词的正确释义：</p>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <span class="font-medium mr-2">1. adequate</span>
+                                <div class="flex-1">
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="q1" class="mr-2">
+                                            <span>A. 足够的；适当的</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="q1" class="mr-2">
+                                            <span>B. 不足的；缺乏的</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="q1" class="mr-2">
+                                            <span>C. 复杂的；困难的</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="q1" class="mr-2">
+                                            <span>D. 简单的；容易的</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary w-full mt-4">提交答案</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 听力训练模块 -->
+            <div id="listening-tab" class="tab-content hidden animate-fade-in">
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">听力练习</h3>
+                    <div class="card">
+                        <div class="flex items-center mb-4">
+                            <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/65d6b7952c5842dabc2360e1180ac88a~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260114164352512709E92615884CBFA4&rrcfp=f06b921b&x-expires=1770972304&x-signature=arGabupb2VjMfVxvdnvzUtqYUik%3D" alt="听力练习" class="w-16 h-16 mr-4">
+                            <div>
+                                <h4 class="font-medium">短篇新闻听力</h4>
+                                <p class="text-text-secondary text-sm">难度：初级 | 时长：2分钟</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-center mb-2">
+                                <span class="text-text-secondary text-sm">00:00 / 02:00</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-center space-x-6">
+                                <button class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fa fa-step-backward"></i>
+                                </button>
+                                <button class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center">
+                                    <i class="fa fa-play"></i>
+                                </button>
+                                <button class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fa fa-step-forward"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-2">
+                            <button class="btn-outline flex-1 flex items-center justify-center">
+                                <i class="fa fa-repeat mr-2"></i> 重听
+                            </button>
+                            <button class="btn-outline flex-1 flex items-center justify-center">
+                                <i class="fa fa-file-text-o mr-2"></i> 查看原文
+                            </button>
+                            <button class="btn-primary flex-1 flex items-center justify-center">
+                                <i class="fa fa-list-ul mr-2"></i> 答题
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-md font-semibold text-text-primary mb-3">听力练习记录</h3>
+                    <div class="card">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">短篇新闻听力</h4>
+                                    <p class="text-text-secondary text-sm">2026年1月13日</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-primary font-bold mr-2">80%</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">长对话听力</h4>
+                                    <p class="text-text-secondary text-sm">2026年1月12日</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-primary font-bold mr-2">75%</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">听力篇章</h4>
+                                    <p class="text-text-secondary text-sm">2026年1月11日</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-primary font-bold mr-2">65%</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 阅读理解模块 -->
+            <div id="reading-tab" class="tab-content hidden animate-fade-in">
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">阅读理解练习</h3>
+                    <div class="card">
+                        <div class="flex items-center mb-4">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/f35a8a83776c4e49a4972f635d43c920~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260114164352512709E92615884CBFA4&rrcfp=f06b921b&x-expires=1770972305&x-signature=Vm3NYKpzvbxU4eqp%2Bjp16L5LDvs%3D" alt="阅读理解" class="w-16 h-16 mr-4">
+                            <div>
+                                <h4 class="font-medium">仔细阅读</h4>
+                                <p class="text-text-secondary text-sm">难度：中级 | 字数：450词</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5 class="font-medium mb-2">The Benefits of Learning a Second Language</h5>
+                            <p class="text-text-primary text-sm leading-relaxed mb-3">
+                                Learning a second language offers numerous benefits. It improves cognitive abilities, enhances memory, and increases attention span. Studies have shown that bilingual individuals tend to have better problem-solving skills and are more creative.
+                            </p>
+                            <p class="text-text-primary text-sm leading-relaxed mb-3">
+                                Additionally, learning a second language provides cultural awareness and understanding. It allows individuals to communicate with people from different backgrounds and gain insight into their traditions and customs. This can lead to greater tolerance and respect for diversity.
+                            </p>
+                            <p class="text-text-primary text-sm leading-relaxed">
+                                Furthermore, being bilingual can open up new career opportunities. In today's globalized world, many employers value employees who can speak multiple languages. It can also make travel more enjoyable and meaningful, as it enables deeper connections with local people and cultures.
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-text-primary mb-2">1. What cognitive benefits are mentioned in the passage?</p>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r1" class="mr-2">
+                                        <span>A. Improved physical health</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r1" class="mr-2">
+                                        <span>B. Better problem-solving skills</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r1" class="mr-2">
+                                        <span>C. Increased wealth</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r1" class="mr-2">
+                                        <span>D. Better physical coordination</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="text-text-primary mb-2">2. How does learning a second language promote cultural understanding?</p>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r2" class="mr-2">
+                                        <span>A. By teaching grammar rules</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r2" class="mr-2">
+                                        <span>B. By providing travel discounts</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r2" class="mr-2">
+                                        <span>C. By enabling communication with different cultures</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="r2" class="mr-2">
+                                        <span>D. By improving job prospects</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary w-full mt-4">提交答案</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-md font-semibold text-text-primary mb-3">阅读练习记录</h3>
+                    <div class="card">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">仔细阅读</h4>
+                                    <p class="text-text-secondary text-sm">2026年1月13日</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-primary font-bold mr-2">85%</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">长篇阅读</h4>
+                                    <p class="text-text-secondary text-sm">2026年1月12日</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-primary font-bold mr-2">70%</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">选词填空</h4>
+                                    <p class="text-text-secondary text-sm">2026年1月11日</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-primary font-bold mr-2">60%</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 写作指导模块 -->
+            <div id="writing-tab" class="tab-content hidden animate-fade-in">
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">写作指导</h3>
+                    <div class="card">
+                        <h4 class="font-medium mb-3">四级写作题型分析</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="font-medium text-primary mb-2">1. 议论文</h5>
+                                <p class="text-text-primary text-sm">要求考生对某一观点或现象进行分析，表达自己的看法。通常需要提出论点、提供论据并得出结论。</p>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-primary mb-2">2. 图表作文</h5>
+                                <p class="text-text-primary text-sm">要求考生描述图表中的数据变化，分析原因并给出自己的看法。需要掌握数据描述的常用表达。</p>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-primary mb-2">3. 书信/通知</h5>
+                                <p class="text-text-primary text-sm">要求考生根据所给情景写一封信或通知，需要注意格式和语气的恰当性。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">高分句型</h3>
+                    <div class="card">
+                        <div class="space-y-3">
+                            <div>
+                                <h5 class="font-medium text-primary mb-1">开头句型</h5>
+                                <p class="text-text-primary text-sm">"With the rapid development of..., more and more people..."</p>
+                                <p class="text-text-secondary text-xs">随着...的快速发展，越来越多的人...</p>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-primary mb-1">过渡句型</h5>
+                                <p class="text-text-primary text-sm">"On the one hand..., on the other hand..."</p>
+                                <p class="text-text-secondary text-xs">一方面..., 另一方面...</p>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-primary mb-1">结论句型</h5>
+                                <p class="text-text-primary text-sm">"In conclusion, I believe that..."</p>
+                                <p class="text-text-secondary text-xs">总之，我认为...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-md font-semibold text-text-primary mb-3">写作练习</h3>
+                    <div class="card">
+                        <h4 class="font-medium mb-3">题目：The Importance of Environmental Protection</h4>
+                        <p class="text-text-primary text-sm mb-4">请写一篇不少于120词的议论文，阐述环境保护的重要性。</p>
+                        
+                        <textarea class="input-field w-full h-32 mb-4" placeholder="请在此处输入你的作文..."></textarea>
+                        
+                        <div class="flex space-x-2">
+                            <button class="btn-outline flex-1">查看范文</button>
+                            <button class="btn-primary flex-1">提交作文</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI学习路径模块 -->
+            <div id="ai-path-tab" class="tab-content hidden animate-fade-in">
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">学习分析</h3>
+                    <div class="card">
+                        <div class="mb-4">
+                            <h4 class="font-medium mb-2">能力雷达图</h4>
+                            <div class="w-full h-64 flex items-center justify-center">
+                                <canvas id="skillsChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <h5 class="font-medium text-primary mb-1">优势项目</h5>
+                                <p class="text-text-primary text-sm">词汇量、阅读理解</p>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-primary mb-1">薄弱项目</h5>
+                                <p class="text-text-primary text-sm">听力理解、写作</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-md font-semibold text-text-primary mb-3">个性化学习计划</h3>
+                    <div class="card">
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="font-medium text-primary mb-2">今日推荐</h5>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-text-primary">听力篇章练习 (30分钟)</span>
+                                        <button class="btn-outline text-sm py-1">开始</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-text-primary">写作模板背诵 (20分钟)</span>
+                                        <button class="btn-outline text-sm py-1">开始</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-primary mb-2">本周重点</h5>
+                                <p class="text-text-primary text-sm">加强听力篇章和写作练习，每天至少保证45分钟的听力训练和30分钟的写作练习。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-md font-semibold text-text-primary mb-3">预测分数</h3>
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h4 class="font-medium">当前预测分数</h4>
+                                <p class="text-text-secondary text-sm">基于最近的学习数据</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-3xl font-bold text-primary">485</span>
+                                <p class="text-text-secondary text-sm">目标分数: 550</p>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                            <div class="bg-primary h-4 rounded-full" style="width: 88%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-text-secondary">
+                            <span>0</span>
+                            <span>425 (及格)</span>
+                            <span>550 (目标)</span>
+                            <span>710 (满分)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 flex justify-around items-center h-16 z-10">
+            <button class="nav-btn flex flex-col items-center justify-center text-primary" data-tab="vocabulary">
+                <i class="fa fa-book text-xl"></i>
+                <span class="text-xs mt-1">词汇</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center text-text-secondary" data-tab="listening">
+                <i class="fa fa-headphones text-xl"></i>
+                <span class="text-xs mt-1">听力</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center text-text-secondary" data-tab="reading">
+                <i class="fa fa-file-text text-xl"></i>
+                <span class="text-xs mt-1">阅读</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center text-text-secondary" data-tab="writing">
+                <i class="fa fa-pencil text-xl"></i>
+                <span class="text-xs mt-1">写作</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center text-text-secondary" data-tab="ai-path">
+                <i class="fa fa-line-chart text-xl"></i>
+                <span class="text-xs mt-1">AI路径</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // 选项卡切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 选项卡切换
+            const tabBtns = document.querySelectorAll('.tab-btn, .nav-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    // 更新选项卡按钮状态
+                    document.querySelectorAll('.tab-btn').forEach(tabBtn => {
+                        if (tabBtn.getAttribute('data-tab') === tabId) {
+                            tabBtn.classList.add('tab-active');
+                            tabBtn.classList.remove('text-text-secondary');
+                        } else {
+                            tabBtn.classList.remove('tab-active');
+                            tabBtn.classList.add('text-text-secondary');
+                        }
+                    });
+                    
+                    // 更新导航按钮状态
+                    document.querySelectorAll('.nav-btn').forEach(navBtn => {
+                        if (navBtn.getAttribute('data-tab') === tabId) {
+                            navBtn.classList.add('text-primary');
+                            navBtn.classList.remove('text-text-secondary');
+                        } else {
+                            navBtn.classList.remove('text-primary');
+                            navBtn.classList.add('text-text-secondary');
+                        }
+                    });
+                    
+                    // 显示对应内容
+                    tabContents.forEach(content => {
+                        if (content.id === tabId + '-tab') {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+            
+            // 初始化能力雷达图
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['词汇', '听力', '阅读', '写作', '翻译'],
+                    datasets: [{
+                        label: '当前能力',
+                        data: [80, 55, 75, 50, 65],
+                        backgroundColor: 'rgba(30, 64, 175, 0.2)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        pointBackgroundColor: 'rgba(30, 64, 175, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(30, 64, 175, 1)'
+                    }, {
+                        label: '目标能力',
+                        data: [90, 80, 85, 80, 80],
+                        backgroundColor: 'rgba(96, 165, 250, 0.2)',
+                        borderColor: 'rgba(96, 165, 250, 1)',
+                        pointBackgroundColor: 'rgba(96, 165, 250, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(96, 165, 250, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+            
+            // 模拟听力播放器功能
+            const playButton = document.querySelector('#listening-tab .fa-play').parentElement;
+            let isPlaying = false;
+            
+            if (playButton) {
+                playButton.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (isPlaying) {
+                        icon.classList.remove('fa-pause');
+                        icon.classList.add('fa-play');
+                        isPlaying = false;
+                    } else {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                        isPlaying = true;
+                        
+                        // 模拟进度条更新
+                        const progressBar = this.closest('.card').querySelector('.bg-primary');
+                        let width = 0;
+                        const interval = setInterval(() => {
+                            if (width >= 100 || !isPlaying) {
+                                clearInterval(interval);
+                                return;
+                            }
+                            width++;
+                            progressBar.style.width = width + '%';
+                            
+                            // 更新时间显示
+                            const minutes = Math.floor((width / 100) * 2);
+                            const seconds = Math.floor(((width / 100) * 2 * 60) % 60);
+                            const timeDisplay = this.closest('.card').querySelector('.text-text-secondary.text-sm');
+                            timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} / 02:00`;
+                        }, 120);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

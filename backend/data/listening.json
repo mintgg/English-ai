@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "title": "News Report 1: European Commission's New Rules",
+    "audio_url": "/audio/news1.mp3",
+    "transcript": "The European Commission has proposed new rules to improve the safety of online marketplaces. The rules would require platforms like Amazon and eBay to take more responsibility for products sold on their sites. They would have to verify the identity of sellers and check that products meet safety standards. The Commission says the new rules are necessary because of the rapid growth of e-commerce and the increasing number of unsafe products being sold online. If approved, the rules would come into effect in two years.",
+    "difficulty": 1,
+    "type": "short",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What is the main purpose of the new rules proposed by the European Commission?",
+        "option_a": "To regulate online advertising",
+        "option_b": "To improve the safety of online marketplaces",
+        "option_c": "To promote e-commerce in Europe",
+        "option_d": "To protect consumer privacy",
+        "answer": "b",
+        "explanation": "The news report clearly states that the European Commission has proposed new rules to improve the safety of online marketplaces."
+      },
+      {
+        "id": 2,
+        "question": "What would platforms like Amazon and eBay have to do under the new rules?",
+        "option_a": "Lower their prices",
+        "option_b": "Pay more taxes",
+        "option_c": "Verify sellers' identity and check product safety",
+        "option_d": "Offer free shipping",
+        "answer": "c",
+        "explanation": "The report mentions that platforms would have to verify the identity of sellers and check that products meet safety standards."
+      },
+      {
+        "id": 3,
+        "question": "When would the new rules come into effect if approved?",
+        "option_a": "Immediately",
+        "option_b": "In one year",
+        "option_c": "In two years",
+        "option_d": "In five years",
+        "answer": "c",
+        "explanation": "The report states that if approved, the rules would come into effect in two years."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Conversation: Job Interview",
+    "audio_url": "/audio/conversation1.mp3",
+    "transcript": "Interviewer: Good morning, please have a seat.\n\nApplicant: Good morning, thank you.\n\nInterviewer: So, let's start with your background. Can you tell me a little about yourself?\n\nApplicant: Sure. I graduated from Beijing University with a degree in Business Administration. I've been working in marketing for the past three years.\n\nInterviewer: What interests you about this position?\n\nApplicant: I'm impressed by your company's innovative approach to marketing. I believe my skills and experience would be a good fit for your team.\n\nInterviewer: Can you describe a successful marketing campaign you've worked on?\n\nApplicant: Yes, last year I led a social media campaign that increased our client's brand awareness by 30% and generated 20% more sales.\n\nInterviewer: That's impressive. What are your salary expectations?\n\nApplicant: Based on my research and experience, I'm looking for a salary in the range of 15,000 to 18,000 yuan per month.\n\nInterviewer: We'll be in touch within a week.",
+    "difficulty": 2,
+    "type": "conversation",
+    "questions": [
+      {
+        "id": 4,
+        "question": "What is the applicant's educational background?",
+        "option_a": "She has a degree in Computer Science",
+        "option_b": "She graduated from Beijing University",
+        "option_c": "She has a master's degree",
+        "option_d": "She studied abroad",
+        "answer": "b",
+        "explanation": "The applicant mentions that she graduated from Beijing University with a degree in Business Administration."
+      },
+      {
+        "id": 5,
+        "question": "How long has the applicant been working in marketing?",
+        "option_a": "One year",
+        "option_b": "Two years",
+        "option_c": "Three years",
+        "option_d": "Five years",
+        "answer": "c",
+        "explanation": "The applicant states that she has been working in marketing for the past three years."
+      },
+      {
+        "id": 6,
+        "question": "What was the result of the social media campaign the applicant led?",
+        "option_a": "It increased brand awareness by 20%",
+        "option_b": "It generated 30% more sales",
+        "option_c": "It increased brand awareness by 30%",
+        "option_d": "It doubled the company's revenue",
+        "answer": "c",
+        "explanation": "The applicant says the campaign increased brand awareness by 30% and generated 20% more sales."
+      },
+      {
+        "id": 7,
+        "question": "What salary range is the applicant looking for?",
+        "option_a": "10,000 to 12,000 yuan per month",
+        "option_b": "12,000 to 15,000 yuan per month",
+        "option_c": "15,000 to 18,000 yuan per month",
+        "option_d": "18,000 to 20,000 yuan per month",
+        "answer": "c",
+        "explanation": "The applicant states she is looking for a salary in the range of 15,000 to 18,000 yuan per month."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Passage: The Benefits of Learning a Second Language",
+    "audio_url": "/audio/passage1.mp3",
+    "transcript": "Learning a second language offers numerous benefits. First, it improves cognitive abilities. Studies have shown that bilingual individuals tend to have better problem-solving skills and enhanced memory. They also have an increased attention span and are better at multitasking.\n\nSecond, learning a new language opens up career opportunities. In today's global economy, many companies value employees who can communicate in multiple languages. Bilingual workers often have an advantage in the job market and may earn higher salaries.\n\nThird, it allows for a deeper understanding of other cultures. Language is closely connected to culture, and learning a language provides insight into the traditions, customs, and way of thinking of a different group of people.\n\nFinally, learning a second language can be a fun and rewarding experience. It provides opportunities to meet new people, travel, and enjoy literature, music, and films in their original language.",
+    "difficulty": 2,
+    "type": "passage",
+    "questions": [
+      {
+        "id": 8,
+        "question": "What cognitive benefits are mentioned in the passage?",
+        "option_a": "Better physical health",
+        "option_b": "Improved problem-solving skills and memory",
+        "option_c": "Faster running speed",
+        "option_d": "Enhanced artistic abilities",
+        "answer": "b",
+        "explanation": "The passage states that bilingual individuals tend to have better problem-solving skills and enhanced memory."
+      },
+      {
+        "id": 9,
+        "question": "How can learning a second language help with career opportunities?",
+        "option_a": "It guarantees a promotion",
+        "option_b": "It eliminates the need for interviews",
+        "option_c": "It provides an advantage in the job market",
+        "option_d": "It automatically increases salary by 50%",
+        "answer": "c",
+        "explanation": "The passage mentions that bilingual workers often have an advantage in the job market and may earn higher salaries."
+      },
+      {
+        "id": 10,
+        "question": "What cultural benefits are associated with learning a second language?",
+        "option_a": "Free travel to foreign countries",
+        "option_b": "Automatic citizenship in another country",
+        "option_c": "Deeper understanding of other cultures",
+        "option_d": "Ability to cook foreign food",
+        "answer": "c",
+        "explanation": "The passage states that learning a language provides insight into the traditions, customs, and way of thinking of a different group of people."
+      },
+      {
+        "id": 11,
+        "question": "What enjoyable aspects of learning a second language are mentioned?",
+        "option_a": "Meeting new people and enjoying media in original language",
+        "option_b": "Getting discounts on international products",
+        "option_c": "Receiving awards for language proficiency",
+        "option_d": "Being able to teach others for money",
+        "answer": "a",
+        "explanation": "The passage mentions that learning a second language provides opportunities to meet new people, travel, and enjoy literature, music, and films in their original language."
+      }
+    ]
+  }
+]
