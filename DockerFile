@@ -21,13 +21,12 @@ RUN cd backend && \
 # 复制所有源代码
 COPY backend/ ./backend/
 COPY index.html ./
-COPY assets/ ./assets/
-
-# 运行构建命令（如果有的话）
-# RUN cd backend && npm run build
 
 # ====== 生产阶段 ======
 FROM node:18-alpine
+
+# 安装 curl 用于健康检查
+RUN apk add --no-cache curl
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -46,7 +45,6 @@ RUN npm config set registry https://registry.npmmirror.com
 COPY --from=builder --chown=appuser:appgroup /app/backend/node_modules ./backend/node_modules
 COPY --from=builder --chown=appuser:appgroup /app/backend ./backend
 COPY --from=builder --chown=appuser:appgroup /app/index.html ./
-COPY --from=builder --chown=appuser:appgroup /app/assets ./assets
 
 # 清理不需要的文件
 RUN rm -rf ./backend/node_modules/.cache && \
@@ -69,7 +67,7 @@ EXPOSE 3000
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD wget -qO- http://localhost:3000/health || exit 1
+    CMD curl -f http://localhost:3000/health || exit 1
 
 # 启动应用
 CMD ["node", "backend/app.js"]
