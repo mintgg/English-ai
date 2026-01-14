@@ -1,7 +1,8 @@
-# 英语四级学习应用 - 优化版Dockerfile
+# 英语四级学习应用 - 国内镜像源版本
+# 如果默认 Dockerfile 拉取镜像失败，使用此文件
 
 # ====== 构建阶段 ======
-FROM node:18.19-alpine3.18 AS builder
+FROM registry.cn-hangzhou.aliyuncs.com/google_containers/node:18.19-alpine3.18 AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -23,7 +24,7 @@ COPY backend/ ./backend/
 COPY index.html ./
 
 # ====== 生产阶段 ======
-FROM node:18.19-alpine3.18
+FROM registry.cn-hangzhou.aliyuncs.com/google_containers/node:18.19-alpine3.18
 
 # 安装 curl 用于健康检查
 RUN apk add --no-cache curl

@@ -1,5 +1,17 @@
 # Docker 部署说明
 
+## ⚠️ 镜像拉取失败？
+
+如果遇到 `node:18-alpine: not found` 错误，请查看 `TROUBLESHOOTING.md` 文档。
+
+**快速解决方案**：
+1. 默认 Dockerfile 已使用 `node:18.19-alpine3.18` 具体版本
+2. 如仍失败，使用 `Dockerfile.cn`（国内镜像源）：
+   ```bash
+   docker build -f Dockerfile.cn -t cet4-app .
+   ```
+3. 或配置 Docker 镜像加速器（详见故障排查文档）
+
 ## 修复的问题
 
 1. **删除了错误的 DockerFile 文件**（正确文件名应为 Dockerfile）
