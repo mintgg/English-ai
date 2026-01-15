@@ -16,7 +16,7 @@ COPY backend/package*.json ./backend/
 
 # 安装依赖（包括开发依赖，用于构建）
 RUN cd backend && \
-    npm ci --include=dev && \
+    npm install && \
     npm cache clean --force
 
 # 复制所有源代码
