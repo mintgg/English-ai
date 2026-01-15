@@ -26,14 +26,16 @@ COPY index.html ./
 FROM node:latest
 
 # 安装 curl 用于健康检查
-RUN apk add --no-cache curl
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 
 # 设置时区
 ENV TZ=Asia/Shanghai
 
 # 创建非root用户
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -S appuser -u 1001 -G appgroup
+RUN groupadd -g 1001 appgroup && \
+    useradd -r -u 1001 -g appgroup appuser
 
 # 设置工作目录
 WORKDIR /app
