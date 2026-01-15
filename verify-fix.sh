@@ -9,7 +9,7 @@ PASS=0
 FAIL=0
 
 # 检查 Dockerfile
-if [ -f "Dockerfile" ] && grep -q "node:18.19-alpine3.18" Dockerfile; then
+if [ -f "Dockerfile" ] && grep -q "FROM node:18-alpine" Dockerfile; then
     echo "✓ Dockerfile 存在且使用正确的镜像版本"
     ((PASS++))
 else

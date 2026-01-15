@@ -1,7 +1,7 @@
 # 英语四级学习应用 - 优化版Dockerfile
 
 # ====== 构建阶段 ======
-FROM node:18.19-alpine3.18 AS builder
+FROM node:18-alpine AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -23,7 +23,7 @@ COPY backend/ ./backend/
 COPY index.html ./
 
 # ====== 生产阶段 ======
-FROM node:18.19-alpine3.18
+FROM node:18-alpine
 
 # 安装 curl 用于健康检查
 RUN apk add --no-cache curl

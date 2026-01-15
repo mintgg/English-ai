@@ -29,7 +29,7 @@ echo ""
 
 # 尝试拉取镜像
 echo "正在测试 Docker 镜像拉取..."
-if docker pull node:18.19-alpine3.18 &> /dev/null; then
+if docker pull node:18-alpine &> /dev/null; then
     echo "✓ 镜像拉取成功，使用默认 Dockerfile"
     DOCKERFILE="Dockerfile"
 else
@@ -37,7 +37,7 @@ else
     DOCKERFILE="Dockerfile.cn"
     
     # 尝试拉取国内镜像
-    if ! docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/node:18.19-alpine3.18 &> /dev/null; then
+    if ! docker pull registry.cn-hangzhou.aliyuncs.com/library/node:18-alpine &> /dev/null; then
         echo ""
         echo "❌ 镜像拉取失败，可能的原因："
         echo "  1. 网络连接问题"

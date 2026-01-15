@@ -12,8 +12,7 @@ ERROR: failed to build: failed to solve: node:18-alpine: failed to resolve sourc
 ## ✅ 已完成的修复
 
 ### 1. 修复 Dockerfile 镜像版本
-- **原版本**: `node:18-alpine`（不稳定的标签）
-- **新版本**: `node:18.19-alpine3.18`（具体版本，更稳定）
+- **使用版本**: `node:18-alpine`（Docker Hub 官方稳定版本）
 - **文件**: `Dockerfile`
 
 ### 2. 创建国内镜像源备用方案
@@ -94,10 +93,10 @@ sudo systemctl restart docker
 
 ```bash
 # 尝试拉取默认镜像
-docker pull node:18.19-alpine3.18
+docker pull node:18-alpine
 
 # 如果失败，使用国内镜像源
-docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/node:18.19-alpine3.18
+docker pull registry.cn-hangzhou.aliyuncs.com/library/node:18-alpine
 ```
 
 ## 📚 相关文档

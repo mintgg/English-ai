@@ -5,7 +5,7 @@
 如果遇到 `node:18-alpine: not found` 错误，请查看 `TROUBLESHOOTING.md` 文档。
 
 **快速解决方案**：
-1. 默认 Dockerfile 已使用 `node:18.19-alpine3.18` 具体版本
+1. 默认 Dockerfile 使用 `node:18-alpine` 官方镜像
 2. 如仍失败，使用 `Dockerfile.cn`（国内镜像源）：
    ```bash
    docker build -f Dockerfile.cn -t cet4-app .

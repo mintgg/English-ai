@@ -9,8 +9,8 @@ ERROR: failed to build: failed to solve: node:18-alpine: failed to resolve sourc
 
 ### 解决方案
 
-#### 方案 1：使用具体版本的镜像（推荐）
-默认 Dockerfile 已更新为使用 `node:18.19-alpine3.18`，这是一个更稳定的版本。
+#### 方案 1：使用标准镜像（推荐）
+默认 Dockerfile 使用 `node:18-alpine`，这是 Docker Hub 上稳定可用的官方镜像。
 
 ```bash
 docker-compose up -d --build
@@ -79,10 +79,10 @@ services:
 
 ```bash
 # 尝试拉取镜像
-docker pull node:18.19-alpine3.18
+docker pull node:18-alpine
 
 # 如果失败，使用国内镜像源
-docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/node:18.19-alpine3.18
+docker pull registry.cn-hangzhou.aliyuncs.com/library/node:18-alpine
 
 # 然后重新构建
 docker-compose up -d --build
